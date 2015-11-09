@@ -1,0 +1,59 @@
+/*
+ For css overrides needed for customizations.
+ By having this separate file for css overrides, it should be easier to backup and restore customizations.
+ If some organization want to style the IPT to their own branding and they want to support more backward compatibility
+ they can create their own modernizr.js with the desired supported elements. They only have to replace the 'default'
+ file with their own.
+*/
+a {
+  font-weight: normal;
+}
+.green{
+  color: #008959;
+}
+#region-menu nav ul li.current {
+  background-color: rgb(195, 151, 151);
+}
+#region-menu nav ul li:only-child {
+  background-color: #007947;
+}
+#region-content h1 {
+  color: #007947;
+}
+div.groupmenu ul li a {
+}
+a:hover{
+  text-decoration:none;
+}
+table.dataTable thead{
+  padding: 10px;
+}
+.dataTables_filter {
+}
+tr.even td.sorting_1 {
+  background-color: #E6F5EB;
+}
+.actionMessage{
+  color: #008959;
+  background-color: #dbf0e8;
+}
+#zone-content{
+}
+h1{
+  margin-bottom: 0px;
+}
+#region-menu{
+  font-size: 1.15em;
+margin-top: 60px;
+height: 50px;
+width: 500px;
+padding-right: 20px;
+}
+
+div.resourceOverview .bodyOverview p{
+  font-size: 0.9em !important;
+}
+form+h2{
+  -moz-border-radius: 0 0 20px 20px;
+  border-radius: 0 0 20px 20px;
+}
