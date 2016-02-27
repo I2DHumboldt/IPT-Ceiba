@@ -117,7 +117,7 @@
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/gbif/ipt/issues</url>
+    <url>https://github.com/I2DHumboldt/IPT-Ceiba/issues</url>
   </issueManagement>
 
   <ciManagement>
@@ -194,6 +194,7 @@
         <artifactId>buildnumber-maven-plugin</artifactId>
         <!-- Warning: do not upgrade this to 1.2 because it will break maven releases -->
         <version>1.2</version>
+        <!-- After changing it to 1.2, it did not generate problems, if you experience them, revert it to 1.0 -->
         <executions>
           <execution>
             <phase>validate</phase>
