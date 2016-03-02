@@ -1,2 +1,4 @@
 .classpath
+.project
 src/main/webapp/WEB-INF/datadir.location
+/target/

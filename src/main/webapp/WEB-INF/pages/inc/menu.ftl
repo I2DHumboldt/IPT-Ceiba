@@ -89,6 +89,8 @@
               <li[#if currentMenu=='home'] class="current"[/#if]><a href="${baseURL}/"><img src="${baseURL}/images/icons/home.png">[@s.text name="menu.home"/]</a></li>
                 <li[#if currentMenu=='inventory'] class="current"[/#if]><a href="http://goo.gl/SBp8RP" target="_blank"><img src="${baseURL}/images/icons/inventory.png">[@s.text name="menu.inventory"/]</a></li>
                 <li[#if currentMenu=='data'] class="current"[/#if]><a href="http://goo.gl/8VC1cg" target="_blank"><img src="${baseURL}/images/icons/data.png">[@s.text name="menu.data"/]</a></li>
+   				<li[#if currentMenu=='faq'] class="current"[/#if]><a href="http://geotux.tuxfamily.org" target="_blank"><img src="${baseURL}/images/icons/about.png">[@s.text name="menu.faq"/]</a></li>
+                <li[#if currentMenu=='manual'] class="current"[/#if]><a href="http://goo.gl/nCsK0l" target="_blank"><img src="${baseURL}/images/icons/usermanu.png">[@s.text name="menu.usermanual"/]</a></li>
                 </ul>
               [/#if]
       	    </nav>
