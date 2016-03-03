@@ -271,8 +271,10 @@ form#login-form {  display: inline-block; }
 }
 
 .logo-iavh {
-  margin: -17px 1072px;
   display:block;
+  position: absolute;
+  right: 16%;
+  top: 0;
 }
 
 
