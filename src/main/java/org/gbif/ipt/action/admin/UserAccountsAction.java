@@ -2,6 +2,8 @@ package org.gbif.ipt.action.admin;
 
 import org.gbif.ipt.action.POSTAction;
 import org.gbif.ipt.config.AppConfig;
+import org.gbif.ipt.config.Constants;
+import org.gbif.ipt.model.Resource;
 import org.gbif.ipt.model.User;
 import org.gbif.ipt.model.User.Role;
 import org.gbif.ipt.service.AlreadyExistingException;
@@ -9,10 +11,12 @@ import org.gbif.ipt.service.DeletionNotAllowedException;
 import org.gbif.ipt.service.DeletionNotAllowedException.Reason;
 import org.gbif.ipt.service.admin.RegistrationManager;
 import org.gbif.ipt.service.admin.UserAccountManager;
+import org.gbif.ipt.service.manage.ResourceManager;
 import org.gbif.ipt.struts2.SimpleTextProvider;
 import org.gbif.ipt.validation.UserValidator;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -33,18 +37,21 @@ public class UserAccountsAction extends POSTAction {
 
   private final UserAccountManager userManager;
   private final UserValidator validator = new UserValidator();
+  private final ResourceManager resourceManager;
 
   private User user;
   private String password2;
   private boolean resetPassword;
   private boolean newUser;
   private List<User> users;
+  private List<Resource> restrictedResources;
 
   @Inject
   public UserAccountsAction(SimpleTextProvider textProvider, AppConfig cfg, RegistrationManager registrationManager,
-    UserAccountManager userManager) {
+    ResourceManager resourceManager, UserAccountManager userManager) {
     super(textProvider, cfg, registrationManager);
     this.userManager = userManager;
+    this.resourceManager = resourceManager;
   }
 
   @Override
@@ -92,6 +99,13 @@ public class UserAccountsAction extends POSTAction {
   public List<User> getUsers() {
     return users;
   }
+  
+  /**
+   * @return the restricted resources
+   */
+  public List<Resource> getRestrictedResources() {
+	  return restrictedResources;
+  }
 
   public String list() {
     users = userManager.list();
@@ -126,6 +140,9 @@ public class UserAccountsAction extends POSTAction {
         LOG.error("An exception occurred while retrieving user: " + e.getMessage(), e);
       }
     }
+    
+    List<String> intellectualRightsList = Arrays.asList(getText("eml.intellectualRights.license.text.internal"));
+    restrictedResources = resourceManager.list(intellectualRightsList);
   }
 
   @Override
@@ -149,6 +166,7 @@ public class UserAccountsAction extends POSTAction {
         if (user.getEmail().equals(getCurrentUser().getEmail())) {
           getCurrentUser().setRole(user.getRole());
         }
+        
         userManager.save(user);
         if (getCurrentUser().getRole() != Role.Admin) {
           return HOME;
@@ -189,6 +207,10 @@ public class UserAccountsAction extends POSTAction {
   public void validateHttpPostOnly() {
     // only validate on form submit ignoring list views
     // && users == null
+	String accessTo = StringUtils.trimToNull(req.getParameter("user.grantedAccessTo"));
+	if (accessTo == null) { // Should we use an interceptor here?
+		user.setGrantedAccessTo(""); 
+	}
     validator.validate(this, user);
     // check 2nd password
     if (newUser && StringUtils.trimToNull(user.getPassword()) != null && !user.getPassword().equals(password2)) {

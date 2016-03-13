@@ -32,6 +32,7 @@
   <#if resource.lastPublished??>
     <#-- the existence of parameter version means the version is not equal to the latest published version -->
     <#if version?? && version!=resource.emlVersion><em class="warn"><@s.text name='portal.resource.version'/> ${version}</em> - <a href="${baseURL}/resource.do?r=${resource.shortname}"><@s.text name='portal.resource.version.latest'/></a></#if>
+    
   </#if>
 </div>
 <div id="resourcelogo">
@@ -71,25 +72,64 @@
                           <td>${frequencies[resource.updateFrequency.identifier]?cap_first!}<em><#if resource.nextPublished??> (<@s.text name='manage.home.next.publication'/>: ${resource.nextPublished?date?string.medium})</#if></em></td>
                       </tr>
                   </#if>
-                  <#if metadataOnly>
-                  <#-- Archive, EML, and RTF download links include Google Analytics event tracking -->
-                  <#-- e.g. Archive event tracking includes components: _trackEvent method, category, action, label, (int) value -->
-                  <#-- EML and RTF versions can always be retrieved by version number but DWCA versions are only stored if IPT Archive Mode is on -->
-                      <tr>
-                          <th><@s.text name='portal.resource.published.archive'/></th>
-                          <td><a href="${baseURL}/archive.do?r=${resource.shortname}<#if version??>&v=${version}</#if>"
-                                 onClick="_gaq.push(['_trackEvent', 'Archive', 'Download', '${resource.shortname}', ${resource.recordsPublished?c!0} ]);"><@s.text name='portal.resource.download'/></a>
-                              (${dwcaFormattedSize}
-                              ) <#if version?? && version!=resource.emlVersion>
-                                  <#if recordsPublishedForVersion?? && recordsPublishedForVersion!= 0>
-                                    ${recordsPublishedForVersion?c} <@s.text name='portal.resource.records'/>
-                                  </#if>
-                                <#else>
-                                  ${resource.recordsPublished?c!0} <@s.text name='portal.resource.records'/>
-                                </#if>
-                          </td>
-                      </tr>
+                    
+					<#function elemInArray array elem sep>
+					  <#list array?split(sep) as arrayElem>
+					    <#if arrayElem == elem>
+					    	<#return true>
+					  	</#if>
+					  </#list>
+					  <#return false>
+					</#function>
+					
+					  <#-- ...Testing... -->
+					  <#assign showDwCA=false/>
+					  <#if eml.intellectualRights?has_content>
+					  	<#if eml.intellectualRights=='Libre a nivel interno.'><h1 class="minuscular">Protegido!</h1>
+						    <#if (Session.curr_user)??>
+							  	<#if Session.curr_user.grantedAccessTo?has_content >
+							  	  <h1 class="minuscular">(${resource.shortname}) --&gt; ${Session.curr_user.grantedAccessTo}</h1>
+							  	  <#if elemInArray(Session.curr_user.grantedAccessTo, resource.shortname, ", ")>
+								      <#assign showDwCA=true/>
+								    <#else><h1 class="minuscular">Permiso denegado!</h1>
+								    </#if>
+						  	  <#else>	
+						  	    <h1 class="minuscular">No se encontró 'grantedAccessTo'... </h1>
+						  	  </#if>
+						    <#else>	
+						      <h1 class="minuscular">Usuario invitado. </h1>
+						    </#if>
+						  <#else>	
+						    <#assign showDwCA=true/>
+						  </#if>	
+					  <#else>	
+						  <#assign showDwCA=true/>	
+					  </#if>
+			      
+			      <#if showDwCA><h1 class="minuscular">Mostrar Enlace!!!</h1><#else><h1 class="minuscular">NO Mostrar Enlace!</h1></#if>
+
+				  <#if showDwCA>
+				    <#if metadataOnly>
+	                  <#-- Archive, EML, and RTF download links include Google Analytics event tracking -->
+	                  <#-- e.g. Archive event tracking includes components: _trackEvent method, category, action, label, (int) value -->
+	                  <#-- EML and RTF versions can always be retrieved by version number but DWCA versions are only stored if IPT Archive Mode is on -->
+	                  <tr>
+	                      <th><@s.text name='portal.resource.published.archive'/></th>
+	                      <td><a href="${baseURL}/archive.do?r=${resource.shortname}<#if version??>&v=${version}</#if>"
+	                             onClick="_gaq.push(['_trackEvent', 'Archive', 'Download', '${resource.shortname}', ${resource.recordsPublished?c!0} ]);"><@s.text name='portal.resource.download'/></a>
+	                          (${dwcaFormattedSize}
+	                          ) <#if version?? && version!=resource.emlVersion>
+	                              <#if recordsPublishedForVersion?? && recordsPublishedForVersion!= 0>
+	                                ${recordsPublishedForVersion?c} <@s.text name='portal.resource.records'/>
+	                              </#if>
+	                            <#else>
+	                              ${resource.recordsPublished?c!0} <@s.text name='portal.resource.records'/>
+	                            </#if>
+	                      </td>
+	                  </tr>
+                  	</#if>
                   </#if>
+                  
                     <tr>
                         <th><@s.text name='portal.resource.published.eml'/></th>
                         <td><a href="${baseURL}/eml.do?r=${resource.shortname}&v=<#if version??>${version}<#else>${resource.emlVersion}</#if>"

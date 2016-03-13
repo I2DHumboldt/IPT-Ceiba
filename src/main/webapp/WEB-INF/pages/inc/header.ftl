@@ -29,6 +29,8 @@
  	<link rel="shortcut icon" href="${baseURL}/images/icons/favicon.ico" type="image/x-icon" />
 	<link href="${baseURL}/rss.do" title="Latest Resources" rel="alternate" type="application/rss+xml" />
 	<link media="all" type="text/css" href="${baseURL}/styles/jquery/jquery-ui.min.css" rel="stylesheet" />
+	<link href="${baseURL}/styles/jquery/multi-select.css" media="screen" rel="stylesheet" type="text/css">
+	
   <!-- for css overrides needed for customizations -->
   <link rel="stylesheet" type="text/css" href="${baseURL}/styles/custom.css" />
   <!-- for support of old browsers, like IE8. See http://modernizr.com/docs/#html5inie -->
@@ -37,6 +39,8 @@
     <script type="text/javascript" src="${baseURL}/js/jquery/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="${baseURL}/js/global.js"></script>
 	<script type="text/javascript" src="${baseURL}/js/sorttable.js"></script>
+	
+	<script src="${baseURL}/js/jquery.multi-select.js" type="text/javascript"></script>
  
 
 [#-- GOOGLE ANALYTICS - asynchroneous: http://code.google.com/apis/analytics/docs/tracking/asyncTracking.html --]

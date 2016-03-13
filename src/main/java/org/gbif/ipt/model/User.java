@@ -22,6 +22,7 @@ public class User implements Serializable, Cloneable {
   private String lastname;
   private Role role = Role.User;
   private Date lastLogin;
+  private String grantedAccessTo;
 
   @Override
   public Object clone() throws CloneNotSupportedException {
@@ -64,6 +65,10 @@ public class User implements Serializable, Cloneable {
     return StringUtils.trimToNull(StringUtils.trimToEmpty(firstname) + " " + StringUtils.trimToEmpty(lastname));
   }
 
+  public String getGrantedAccessTo() {
+	return grantedAccessTo;
+  }
+  
   /**
    * Called in login page, redirected to on failed logins.
    */
@@ -142,6 +147,10 @@ public class User implements Serializable, Cloneable {
     this.role = role == null ? Role.User : role;
   }
 
+  public void setGrantedAccessTo(String grantedAccessTo) {
+	this.grantedAccessTo = grantedAccessTo;
+  }
+  
   @Override
   public String toString() {
     return "User " + email;

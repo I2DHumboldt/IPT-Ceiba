@@ -82,6 +82,8 @@
 
     }
 
+		// Initialize/select the intellectual rights value from current eml file  
+		$("select#eml\\.intellectualRights").val("${eml.intellectualRights}"); 
 	});
 
 
@@ -123,23 +125,44 @@
     		</div>
     		<div class="clearfix"></div>
     	</div>
-  	  	<@text name="eml.purpose" i18nkey="eml.purpose" help="i18n"/>
-      	<div class="infos">
-    		<img class="infoImg" src="${baseURL}/images/info.gif" />
-    		<div class="info">
-    			<span class="idSuffix">
-    				<@s.text name='eml.intellectualRights.license.help'/>
-    			</span>
-    		</div>
-    		<select name="licenseList" id="licenseList">
-    			<#list licenses?keys as licenseN>
-    				<option value="${licenses[licenseN]}" <#if (licenseN!"")=="${licenseName!}"> selected="selected"</#if>>
-    					${licenseN}
-    				</option>
-    			</#list>
-    		</select>
-    	</div>
-      	<@text name="eml.intellectualRights" i18nkey="eml.intellectualRights" help="i18n" />
+    	
+    	<br />
+  	  <@text name="eml.purpose" i18nkey="eml.purpose" help="i18n"/>
+  	  	
+  	  	<br /><br />
+	      	<div class="infos">
+	      	  <label><@s.text name='rtf.license'/></label>
+	    			<img class="infoImg" src="${baseURL}/images/info.gif" />
+	    			<div class="info">
+	    				<span class="idSuffix">
+	    					<@s.text name='eml.intellectualRights.license.help'/>
+	    				</span>
+	    			</div>
+		    		<select name="licenseList" id="licenseList">
+		    			<#list licenses?keys as licenseN>
+		    				<option value="${licenses[licenseN]}" <#if (licenseN!"")=="${licenseName!}"> selected="selected"</#if>>
+		    					${licenseN}
+		    				</option>
+		    			</#list>
+		    		</select>
+		    	</div>
+    	<br /><br />
+     	
+     	<label for="eml.intellectualRights"><@s.text name='eml.intellectualRights'/></label>
+			<img class="infoImg" src="http://localhost:8080/ceiba/images/info.gif">
+			<div class="info" style="display: block;">
+				<@s.text name='eml.intellectualRights.help'/>
+			</div>
+     	
+     	<select id="eml.intellectualRights" name="eml.intellectualRights" value="${eml.intellectualRights}" i18nkey="eml.intellectualRights" help="i18n" javaGetter=false >
+	     	<option><@s.text name='eml.intellectualRights.license.text.externalInternal'/></option>
+	     	<option><@s.text name='eml.intellectualRights.license.text.internal'/></option>
+	     	<option><@s.text name='eml.intellectualRights.license.text.internalNotification'/></option>
+	     	<option><@s.text name='eml.intellectualRights.license.text.temporalRestriction'/></option>
+     	</select>
+     	<!-- We are selecting the default value via JavaScript, look at the bottom of the $(document).ready function. -->
+     	
+			<br /><br /><br />
     	<@text name="eml.additionalInfo" i18nkey="eml.additionalInfo" help="i18n"/>
   	</div>
     <div id="Alternative-Identifiers">

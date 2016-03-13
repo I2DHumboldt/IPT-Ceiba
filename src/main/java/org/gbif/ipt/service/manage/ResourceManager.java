@@ -205,6 +205,15 @@ public interface ResourceManager {
   List<Resource> list(PublicationStatus status);
 
   /**
+   * list all resources in the IPT having certain intellectual rights.
+   *
+   * @param intellectualRights List<String>
+   *
+   * @return list of resources, or an empty list if none were found
+   */
+  List<Resource> list(List<String> intellectualRightsList);
+  
+  /**
    * list all resource that can be managed by a given user.
    *
    * @param user User
