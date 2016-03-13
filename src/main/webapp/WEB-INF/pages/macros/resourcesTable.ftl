@@ -119,6 +119,10 @@ resourcesTable macro: Generates a data table that has searching, pagination, and
 	        	sTitle = "<@s.text name="manage.home.last.modified.title" />";
 	        else if (sColumnTitle == "<@s.text name="manage.home.last.publication" />")
 	        	sTitle = "<@s.text name="manage.home.last.publication.title" />";
+	        else if (sColumnTitle == "<@s.text name="manage.home.visible" />")
+	        	sTitle = "<@s.text name="manage.home.visible.title" />";
+	        else if (sColumnTitle == "<@s.text name="portal.home.author" />")
+	        	sTitle = "<@s.text name="portal.home.author.title" />";
 	        this.setAttribute( 'title', sTitle );
 	    } );
 	    
