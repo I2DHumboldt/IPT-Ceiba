@@ -96,6 +96,10 @@ menu.admin=Administración
 menu.account=Cuenta
 menu.logout=Salir
 menu.loggedin=Sesión iniciada como {0}
+menu.inventory=Inventario
+menu.data=Solicitar Datos
+menu.usermanual=Manual de usuario
+menu.faq=Preguntas Frecuentes
 
 # submenus
 submenu.basic=Metadatos Básicos

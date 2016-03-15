@@ -165,7 +165,9 @@
         <param name="contentType">text/xml</param>
       </result>
     </action>
-
+		<action name="faq">
+      <result>/WEB-INF/pages/faq.ftl</result>
+    </action>
   </package>
 
   <!--
