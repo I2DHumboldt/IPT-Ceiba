@@ -1091,7 +1091,7 @@ eml.intellectualRights.license.odbl.text=Esta [DATA(BASE)-NAME] se hace disponib
 eml.intellectualRights.license.text.externalInternal=Libre a nivel externo e interno.
 eml.intellectualRights.license.text.internal=Libre a nivel interno.
 eml.intellectualRights.license.text.internalNotification=Libre a nivel interno con notificación previa.
-eml.intellectualRights.license.text.temporalRestriction=Restricción temporal.
+eml.intellectualRights.license.text.temporalRestriction=Restringido temporalmente.
 
 ####
 # RTF

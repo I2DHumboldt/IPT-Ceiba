@@ -7,6 +7,7 @@ public final class Constants {
   public static final String SESSION_FILE = "file";
   public static final String SESSION_FILE_NAME = "fileName";
   public static final String SESSION_FILE_CONTENT_TYPE = "contentType";
+  public static final String HUMBOLDT_MAIL_DOMAIN = "@humboldt.org.co";
   public static final String REQ_PARAM_RESOURCE = "r";
   public static final String REQ_PARAM_SOURCE = "s";
   public static final String REQ_PARAM_VERSION = "v";
