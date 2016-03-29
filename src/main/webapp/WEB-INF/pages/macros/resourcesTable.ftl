@@ -26,6 +26,56 @@ resourcesTable macro: Generates a data table that has searching, pagination, and
         }
     } );
 
+    /* A cache variable to store data already retrieved from Elasticsearch. */ 
+    var esCache = {};
+
+    /* Determines whether a row must be in results set or not */
+    $.fn.dataTableExt.afnFiltering.push( 
+        function( settings, aData, dataIndex ) {
+            var textSearch = $(".dataTables_filter input").val().trim(),
+                response;
+            if ( textSearch.length > 0 ){
+                if ( esCache[textSearch.toLowerCase()] === undefined ){
+                    console.log(textSearch + " NOT in cache! Weird, it should be there!!!");
+                    return false;
+                } else { // In cache, return it
+                    response = esCache[textSearch.toLowerCase()];
+                }
+                
+                // aData[0] has a URL containing the resource id, check if it's in the response array
+                if ( response.indexOf(aData[0].split("?r=")[1].split("'")[0]) != -1 ){ 
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        }
+    );
+    
+    /* Search logic */
+    var doSearch = function(){
+        text = $(".dataTables_filter input").val().trim();
+        if ( text.length > 0 ){ // At least a character to start searching 
+            if ( esCache[text.toLowerCase()] === undefined ){
+                // Not in cache, sending request to Elasticsearch.
+                $.getJSON( "http://127.0.0.1:9200/ceiba/recurso/_search", { q:"\""+text+"\"", size:1000, _source:false } )
+                    .done(function( json ) {
+                        esCache[text.toLowerCase()] = $.map( json.hits.hits, function( value, index ) {return value._id;} );
+                        $('#rtable').dataTable().fnDraw();
+                    })  
+                    .fail(function( jqxhr, textStatus, error ) {
+                        var err = textStatus + ", " + error;
+                        console.log( "Request Failed: " + err );
+                });
+            } else { // In cache, just go on...
+                $('#rtable').dataTable().fnDraw();
+            }
+        }          
+    };
+
+
     // parse a date in yyyy-mm-dd format
     function parseDate(input) {
             var parts = input.match(/(\d+)/g);
@@ -49,7 +99,7 @@ resourcesTable macro: Generates a data table that has searching, pagination, and
       </#list>
     ];
 
-    $(document).ready(function($) {
+    $(document).ready(function($) {    
         $('#rtableContainer').html( '<table cellpadding="3" cellspacing="3" border="0" class="display" id="rtable"></table>' );
         $('#rtable').dataTable( {
             "aaData": aDataSet,
@@ -102,44 +152,66 @@ resourcesTable macro: Generates a data table that has searching, pagination, and
         
         // Set tooltips
         $('#rtable thead th').each( function() {
-	        var	sTitle,
-	        	sColumnTitle = this.textContent;
-	         
-	        if ( sColumnTitle == "<@s.text name="manage.home.name" />" )
-	            sTitle = "<@s.text name="manage.home.name.title" />";
-	        else if (sColumnTitle == "<@s.text name="manage.home.contract" />")
-	        	sTitle = "<@s.text name="manage.home.contract.title" />";
-	        else if (sColumnTitle == "<@s.text name="manage.home.type" />")
-	        	sTitle = "<@s.text name="manage.home.type.title" />";
-	        else if (sColumnTitle == "<@s.text name="manage.home.subtype" />")
-	        	sTitle = "<@s.text name="manage.home.subtype.title" />";
-	        else if (sColumnTitle == "<@s.text name="portal.home.records" />")
-	        	sTitle = "<@s.text name="portal.home.records.title" />";
-	        else if (sColumnTitle == "<@s.text name="manage.home.last.modified" />")
-	        	sTitle = "<@s.text name="manage.home.last.modified.title" />";
-	        else if (sColumnTitle == "<@s.text name="manage.home.last.publication" />")
-	        	sTitle = "<@s.text name="manage.home.last.publication.title" />";
-	        else if (sColumnTitle == "<@s.text name="manage.home.visible" />")
-	        	sTitle = "<@s.text name="manage.home.visible.title" />";
-	        else if (sColumnTitle == "<@s.text name="portal.home.author" />")
-	        	sTitle = "<@s.text name="portal.home.author.title" />";
-	        this.setAttribute( 'title', sTitle );
-	    } );
-	    
-	    // Set tooltip to filter text field
-	    $('#rtable_filter input')[0].setAttribute('title', "<@s.text name="manage.mapping.filter.title" />");
-	    
-	    // Tooltip initialization
-    	$('#rtable, #rtable_filter input').tooltip( {
-	        "delay": 100,
-	        "track": true,
-	        "fade": 250,
-            position: {
-				my: "center bottom-20",
-				at: "center top"
-			}			
-	    } );
+          var  sTitle,
+            sColumnTitle = this.textContent;
+           
+          if ( sColumnTitle == "<@s.text name="manage.home.name" />" )
+              sTitle = "<@s.text name="manage.home.name.title" />";
+          else if (sColumnTitle == "<@s.text name="manage.home.contract" />")
+            sTitle = "<@s.text name="manage.home.contract.title" />";
+          else if (sColumnTitle == "<@s.text name="manage.home.type" />")
+            sTitle = "<@s.text name="manage.home.type.title" />";
+          else if (sColumnTitle == "<@s.text name="manage.home.subtype" />")
+            sTitle = "<@s.text name="manage.home.subtype.title" />";
+          else if (sColumnTitle == "<@s.text name="portal.home.records" />")
+            sTitle = "<@s.text name="portal.home.records.title" />";
+          else if (sColumnTitle == "<@s.text name="manage.home.last.modified" />")
+            sTitle = "<@s.text name="manage.home.last.modified.title" />";
+          else if (sColumnTitle == "<@s.text name="manage.home.last.publication" />")
+            sTitle = "<@s.text name="manage.home.last.publication.title" />";
+          else if (sColumnTitle == "<@s.text name="manage.home.visible" />")
+            sTitle = "<@s.text name="manage.home.visible.title" />";
+          else if (sColumnTitle == "<@s.text name="portal.home.author" />")
+            sTitle = "<@s.text name="portal.home.author.title" />";
+          this.setAttribute( 'title', sTitle );
+        } );
+      
+        // Set tooltip to filter text field
+        $('#rtable_filter input')[0].setAttribute('title', "<@s.text name="manage.mapping.filter.title" />");
         
+        // Tooltip initialization
+        $('#rtable, #rtable_filter input').tooltip( {
+          "delay": 100,
+          //"track": true,
+          "fade": 250,
+          position: {
+            my: "center bottom-20",
+            at: "center top"
+          }      
+        } ).focus(function(evt) { // Avoid having the tooltip open on input focus 
+          $(evt.currentTarget).tooltip("close").tooltip("disable");
+        }).blur(function(evt) {
+          $(evt.currentTarget).tooltip("enable");
+        });
+          
+        // Event listener to search input
+        var inputSearch = $(".dataTables_filter input"),
+            text;
+        inputSearch.unbind('keyup search input').bind('keyup', function(e) {
+            if ( $(".dataTables_filter input").val().trim().length == 0 ){
+                $('#rtable').dataTable().fnDraw();
+            } else {
+                if ( e.which == 13 ){
+                    doSearch(); 
+                }
+            }
+        });
+      
+        // Add a search button
+        $("#rtable_filter label").append(
+            '<button type="button" onclick="doSearch()" style="background-color:transparent; border:none; box-shadow:none; vertical-align: middle; margin-left:-5px;cursor: pointer;"><img src="${baseURL}/images/icons/announcement-grey.png" width="32px"/></button>'
+        );
+      
     } );
     
 </script>
