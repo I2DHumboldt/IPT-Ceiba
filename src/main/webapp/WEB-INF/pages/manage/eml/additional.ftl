@@ -149,7 +149,7 @@
     	<br /><br />
      	
      	<label for="eml.intellectualRights"><@s.text name='eml.intellectualRights'/></label>
-			<img class="infoImg" src="http://localhost:8080/ceiba/images/info.gif">
+			<img class="infoImg" src="${baseURL}/images/info.gif">
 			<div class="info" style="display: block;">
 				<@s.text name='eml.intellectualRights.help'/>
 			</div>
