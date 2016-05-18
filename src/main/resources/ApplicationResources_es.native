@@ -1088,10 +1088,10 @@ eml.intellectualRights.license.cczero.text=Este trabajo está bajo una licencia 
 eml.intellectualRights.license.pddl.text=Esta [DATA(BASE)] se hace disponible bajo la licencia Public Domain Dedication and License v1.0, cuyo texto completo puede encontrarse en: http://www.opendatacommons.org/licenses/pddl/1.0/.
 eml.intellectualRights.license.odcby.text=Esta [DATA(BASE)-NAME] se hace disponible bajo la licencia Open Data Commons Attribution: http://www.opendatacommons.org/licenses/by/1.0/.
 eml.intellectualRights.license.odbl.text=Esta [DATA(BASE)-NAME] se hace disponible bajo la licencia Open Database: http://opendatacommons.org/licenses/odbl/1.0/ .Cualquier derecho sobre los contenidos individuales de la  base de datos, se distribuye bajo la licencia Database Contents: http://opendatacommons.org/licenses/dbcl/1.0/.
-eml.intellectualRights.license.text.externalInternal=Libre a nivel externo e interno.
-eml.intellectualRights.license.text.internal=Libre a nivel interno.
-eml.intellectualRights.license.text.internalNotification=Libre a nivel interno con notificación previa.
-eml.intellectualRights.license.text.temporalRestriction=Restringido temporalmente.
+eml.intellectualRights.license.text.externalInternal=Libre a nivel interno y externo (Creative Commons Attribution Non Commercial (CC-BY-NC) 4.0)
+eml.intellectualRights.license.text.internal=Libre a nivel interno
+eml.intellectualRights.license.text.internalNotification=Libre a nivel interno con notificación previa
+eml.intellectualRights.license.text.temporalRestriction=Restringido temporalmente
 
 ####
 # RTF
