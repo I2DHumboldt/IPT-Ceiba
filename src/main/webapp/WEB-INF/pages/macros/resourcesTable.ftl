@@ -87,7 +87,6 @@ resourcesTable macro: Generates a data table that has searching, pagination, and
       <#list resources as r>
           [<#if r.eml.logoUrl?has_content>'<img class="resourceminilogo" src="${r.eml.logoUrl}" />'<#else>'${emptyString}'</#if>,
            "<a href='${baseURL}<#if !shownPublicly>/manage</#if>/resource.do?r=${r.shortname}'><if><#if r.title?has_content>${r.title?replace("\'", "\\'")?replace("\"", '\\"')}<#else>${r.shortname}</#if></a>",
-           <#if r.eml.project.funding?has_content>'${r.eml.project.funding.replace("\n"," ").replace('"','').replace("“","").replace("”","")}'<#else>'${emptyString}'</#if>,
            <#if r.coreType?has_content && types[r.coreType?lower_case]?has_content>'${types[r.coreType?lower_case]?cap_first!}'<#else>'${emptyString}'</#if>,
            <#if r.subtype?has_content && datasetSubtypes[r.subtype?lower_case]?has_content >'${datasetSubtypes[r.subtype?lower_case]?cap_first!}'<#else>'${emptyString}'</#if>,
            '${r.recordsPublished!0}',
@@ -122,7 +121,6 @@ resourcesTable macro: Generates a data table that has searching, pagination, and
             "aoColumns": [
                 { "sTitle": "<@s.text name="portal.home.logo"/>", "bSearchable": false, "bVisible": false },
                 { "sTitle": "<@s.text name="manage.home.name"/>"},
-                { "sTitle": "<@s.text name="manage.home.contract"/>"},
                 { "sTitle": "<@s.text name="manage.home.type"/>"},
                 { "sTitle": "<@s.text name="manage.home.subtype"/>"},
                 { "sTitle": "<@s.text name="portal.home.records"/>", "bSearchable": false, "sType": "number"},
@@ -141,8 +139,9 @@ resourcesTable macro: Generates a data table that has searching, pagination, and
                    In this case, highlight the row to bring the problem to the resource manager's attention. */
                 var today = new Date();
                 for ( var i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ ) {
-                  // warning fragile: index 8 must always equal next published date on both home page and manage page
-                  var nextPublishedDate = (oSettings.aoData[i]._aData[8] == '${emptyString}') ? today : parseDate(oSettings.aoData[i]._aData[8]);
+                  // warning fragile: index 7 must always equal next published date on both home page and manage page
+                  // OJO, this index may vary when columns are added or remved!!!
+                  var nextPublishedDate = (oSettings.aoData[i]._aData[7] == '${emptyString}') ? today : parseDate(oSettings.aoData[i]._aData[7]);
                   if (today > nextPublishedDate) {
                     oSettings.aoData[i].nTr.className += " rowInError";
                   }
@@ -157,8 +156,6 @@ resourcesTable macro: Generates a data table that has searching, pagination, and
            
           if ( sColumnTitle == "<@s.text name="manage.home.name" />" )
               sTitle = "<@s.text name="manage.home.name.title" />";
-          else if (sColumnTitle == "<@s.text name="manage.home.contract" />")
-            sTitle = "<@s.text name="manage.home.contract.title" />";
           else if (sColumnTitle == "<@s.text name="manage.home.type" />")
             sTitle = "<@s.text name="manage.home.type.title" />";
           else if (sColumnTitle == "<@s.text name="manage.home.subtype" />")
