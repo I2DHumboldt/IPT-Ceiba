@@ -60,7 +60,7 @@ resourcesTable macro: Generates a data table that has searching, pagination, and
         if ( text.length > 0 ){ // At least a character to start searching 
             if ( esCache[text.toLowerCase()] === undefined ){
                 // Not in cache, sending request to Elasticsearch.
-                $.getJSON( "http://127.0.0.1:9200/ceiba/recurso/_search", { q:"\""+text+"\"", size:1000, _source:false } )
+                $.getJSON( "http://127.0.0.1:9200/ceiba/recurso/_search", { q:text, size:1000, _source:false } )
                     .done(function( json ) {
                         esCache[text.toLowerCase()] = $.map( json.hits.hits, function( value, index ) {return value._id;} );
                         $('#rtable').dataTable().fnDraw();
